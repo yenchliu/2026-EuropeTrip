@@ -1,0 +1,6 @@
+{
+  "name": "2026英法之旅",
+  "description": "娟姊與芳芳英法11日之旅行程手機導覽小工具",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
