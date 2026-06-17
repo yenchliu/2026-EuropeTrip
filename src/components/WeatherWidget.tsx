@@ -17,9 +17,28 @@ export function WeatherWidget({ lat, lon, dateStr }: WeatherWidgetProps) {
     const fetchWeather = async () => {
       try {
         setLoading(true);
-        // Open-Meteo supports up to 16 days of forecast
+        // Open-Meteo supports up to 16 days of forecast. Check if date is within range.
+        const targetDate = new Date(dateStr);
+        const today = new Date();
+        const diffTime = targetDate.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays < -90 || diffDays > 15) {
+          // Out of range (we only handle recent past and near future)
+          if (isMounted) {
+            setTemp(null);
+            setLoading(false);
+          }
+          return;
+        }
+
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,weathercode&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`;
         const res = await fetch(url);
+        
+        if (!res.ok) {
+          throw new Error("Weather API Error");
+        }
+
         const data = await res.json();
 
         if (isMounted && data.daily && data.daily.temperature_2m_max?.length > 0) {
@@ -28,6 +47,9 @@ export function WeatherWidget({ lat, lon, dateStr }: WeatherWidgetProps) {
         }
       } catch (err) {
         console.error("Failed to fetch weather", err);
+        if (isMounted) {
+          setTemp(null); // Clear or leave null on error
+        }
       } finally {
         if (isMounted) setLoading(false);
       }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { addExpense, deleteExpense, subscribeToExpenses, Expense } from "../lib/firebase";
 import { Plus, Trash2, Wallet } from "lucide-react";
 import { cn } from "../lib/utils";
@@ -19,41 +19,111 @@ const CATEGORY_LABELS = {
   Other: "其他"
 };
 
+// Helper to get local data
+const getLocalExpenses = (): Expense[] => {
+  try {
+    const data = localStorage.getItem("backup_expenses");
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveLocalExpenses = (data: Expense[]) => {
+  try {
+    localStorage.setItem("backup_expenses", JSON.stringify(data));
+  } catch (err) {
+    console.error("Local storage save error:", err);
+  }
+};
+
+let cachedExpenses: Expense[] = getLocalExpenses();
+let isCached = cachedExpenses.length > 0;
+
 export function ExpenseTracker() {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [expenses, setExpenses] = useState<Expense[]>(cachedExpenses);
+  const [loading, setLoading] = useState(!isCached);
+  const [syncStatus, setSyncStatus] = useState<"synced" | "offline" | "error">("synced");
 
   // Form states
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState<'EUR' | 'GBP' | 'TWD'>("EUR");
   const [category, setCategory] = useState<Expense['category']>("Food");
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
-    const unsub = subscribeToExpenses((data) => {
-      setExpenses(data);
-      setLoading(false);
-    });
+    const unsub = subscribeToExpenses(
+      (data) => {
+        cachedExpenses = data;
+        isCached = true;
+        setExpenses(data);
+        saveLocalExpenses(data);
+        setLoading(false);
+        setSyncStatus("synced");
+      },
+      (error) => {
+        console.error("Firebase sync error, using local storage:", error);
+        setSyncStatus("error");
+        setLoading(false);
+      }
+    );
     return () => unsub();
   }, []);
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !amount || isNaN(Number(amount))) return;
+    if (!name || !amount || isNaN(Number(amount)) || isAdding) return;
+    
+    setIsAdding(true);
     
     // date in YYYY-MM-DD
     const today = new Date().toISOString().split('T')[0];
     
-    await addExpense({
+    const newExpense = {
       name,
       amount: Number(amount),
       currency,
       category,
-      date: today
-    });
+      date: today,
+      createdAt: new Date().toISOString()
+    };
+
+    // Optimistic update
+    const tempId = "local_" + Date.now();
+    const updatedExpenses = [{ id: tempId, ...newExpense }, ...expenses];
+    setExpenses(updatedExpenses);
+    saveLocalExpenses(updatedExpenses);
     
-    setName("");
-    setAmount("");
+    addExpense(newExpense)
+      .then(() => {
+        setSyncStatus("synced");
+      })
+      .catch(err => {
+        console.error("Failed to upload to cloud, saved locally:", err);
+        setSyncStatus("offline");
+      });
+
+    setTimeout(() => {
+      setName("");
+      setAmount("");
+      setIsAdding(false);
+    }, 500);
+  };
+
+  const handleDelete = async (id: string) => {
+    // Optimistic delete
+    const updated = expenses.filter(e => e.id !== id);
+    setExpenses(updated);
+    saveLocalExpenses(updated);
+
+    try {
+      await deleteExpense(id);
+      setSyncStatus("synced");
+    } catch (err) {
+      console.error("Failed to delete from cloud, removed locally:", err);
+      setSyncStatus("offline");
+    }
   };
 
   const totalEUR = expenses.filter(e => e.currency === 'EUR').reduce((sum, e) => sum + e.amount, 0);
@@ -80,10 +150,25 @@ export function ExpenseTracker() {
 
       {/* Add Form */}
       <form onSubmit={handleAdd} className="bg-white p-5 rounded-[24px] shadow-sm border border-[#EBE9E0] flex flex-col gap-4">
-        <h3 className="text-[10px] font-bold text-[#A6A49B] tracking-widest uppercase flex items-center gap-2">
-          <Wallet className="w-3.5 h-3.5" />
-          新增記帳 / ADD EXPENSE
-        </h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-[10px] font-bold text-[#A6A49B] tracking-widest uppercase flex items-center gap-2">
+            <Wallet className="w-3.5 h-3.5" />
+            新增記帳 / ADD EXPENSE
+          </h3>
+          <div className="flex items-center gap-1.5 text-[9px] font-medium tracking-wider uppercase text-neutral-400">
+            {syncStatus === "synced" ? (
+              <>
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full inline-block animate-pulse" />
+                雲端已同步 (夫妻共享)
+              </>
+            ) : (
+              <>
+                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full inline-block" />
+                離線模式 (待自動同步)
+              </>
+            )}
+          </div>
+        </div>
         
         <div className="flex flex-col gap-3">
           <input 
@@ -137,9 +222,16 @@ export function ExpenseTracker() {
 
           <button 
             type="submit"
-            className="w-full bg-black text-white rounded-xl py-3.5 text-[10px] font-bold tracking-widest uppercase hover:bg-[#2D2D2D] transition-colors mt-2"
+            disabled={isAdding}
+            className={cn(
+              "w-full rounded-xl py-3.5 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 mt-2 flex items-center justify-center gap-2",
+              isAdding 
+                ? "bg-[#D1FAE5] text-green-700" 
+                : "bg-black text-white hover:bg-[#2D2D2D] active:bg-[#1A1A1A] active:scale-[0.98]"
+            )}
           >
-            加入紀錄
+            <Plus className={cn("w-4 h-4", isAdding && "hidden")} />
+            {isAdding ? "已加入紀錄" : "加入紀錄"}
           </button>
         </div>
       </form>
@@ -170,7 +262,7 @@ export function ExpenseTracker() {
                     {expense.amount.toLocaleString(undefined, { minimumFractionDigits: expense.currency !== 'TWD' ? 2 : 0, maximumFractionDigits: expense.currency !== 'TWD' ? 2 : 0 })}
                   </span>
                   <button 
-                    onClick={() => expense.id && deleteExpense(expense.id)}
+                    onClick={() => expense.id && handleDelete(expense.id)}
                     className="text-[#E5E3DB] hover:text-red-500 p-1 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />

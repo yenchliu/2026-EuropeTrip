@@ -3,34 +3,6 @@ import { Plane, Phone, Info, ShieldAlert } from "lucide-react";
 export function ToolsTab() {
   return (
     <div className="flex flex-col gap-6 p-6 pb-12">
-      {/* Flight Info */}
-      <div className="flex flex-col gap-4">
-        <h3 className="text-[10px] font-bold text-[#A6A49B] tracking-widest uppercase flex items-center gap-2">
-          <Plane className="w-3.5 h-3.5" />
-          航班資訊 / FLIGHT
-        </h3>
-        
-        <div className="flex flex-col gap-3">
-          <div className="bg-white p-4 rounded-xl border border-[#EBE9E0] shadow-sm flex flex-col">
-            <span className="text-[10px] font-bold tracking-widest text-[#8C8A82] uppercase mb-1.5">去程 | 2026/06/27 (六)</span>
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-[#2D2D2D]">長榮航空 BR67</span>
-              <span className="text-sm font-serif italic text-blue-700">08:15 - 19:20</span>
-            </div>
-            <span className="text-xs text-[#8C8A82] mt-1">台北桃園(TPE) ✈ 倫敦希斯洛(LHR)</span>
-          </div>
-
-          <div className="bg-white p-4 rounded-xl border border-[#EBE9E0] shadow-sm flex flex-col opacity-80">
-            <span className="text-[10px] font-bold tracking-widest text-[#8C8A82] uppercase mb-1.5">回程 | 2026/07/06 (一)</span>
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-[#2D2D2D]">長榮航空 BR88</span>
-              <span className="text-sm font-serif italic text-blue-700">11:20 - 07:00(+1)</span>
-            </div>
-            <span className="text-xs text-[#8C8A82] mt-1">巴黎戴高樂(CDG) ✈ 台北桃園(TPE)</span>
-          </div>
-        </div>
-      </div>
-
       {/* Emergency Contacts */}
       <div className="flex flex-col gap-4">
         <h3 className="text-[10px] font-bold text-[#A6A49B] tracking-widest uppercase flex items-center gap-2">

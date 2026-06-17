@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DayItinerary, Place } from "../types";
 import { cn } from "../lib/utils";
-import { MapPin, Navigation, Utensils, Train, Map, Camera, Phone, Calendar as CalendarIcon, Info, X } from "lucide-react";
+import { MapPin, Navigation, Utensils, Train, Map, Camera, Phone, Calendar as CalendarIcon, Info, X, Upload } from "lucide-react";
 import { WeatherWidget } from "./WeatherWidget";
 import { motion, AnimatePresence } from "motion/react";
+import { saveCustomImage, deleteCustomImage, subscribeToCustomImages } from "../lib/firebase";
 
 interface ItineraryCardProps {
   dayInfo: DayItinerary;
@@ -11,6 +12,131 @@ interface ItineraryCardProps {
 
 export function ItineraryCard({ dayInfo }: ItineraryCardProps) {
   const [selectedLoc, setSelectedLoc] = useState<Place | null>(null);
+  
+  const [customImages, setCustomImages] = useState<Record<string, string>>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("custom_spot_images") || "{}");
+    } catch {
+      return {};
+    }
+  });
+
+  // Keep a real-time listener to sync any newly uploaded/edited photos across clients
+  useEffect(() => {
+    const unsubscribe = subscribeToCustomImages((images) => {
+      setCustomImages(images);
+      try {
+        localStorage.setItem("custom_spot_images", JSON.stringify(images));
+      } catch (err) {
+        console.error("Failed to save to localStorage:", err);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const [editUrl, setEditUrl] = useState("");
+  const [isEditingPhoto, setIsEditingPhoto] = useState(false);
+
+  // Sync edit URL when location is selected
+  useEffect(() => {
+    if (selectedLoc) {
+      setEditUrl(customImages[selectedLoc.name] || selectedLoc.imageUrl || "");
+      setIsEditingPhoto(false);
+    }
+  }, [selectedLoc, customImages]);
+
+  const handleSavePhoto = async () => {
+    if (!selectedLoc) return;
+    try {
+      await saveCustomImage(selectedLoc.name, editUrl);
+      setIsEditingPhoto(false);
+    } catch (error) {
+      console.error("Failed to save custom photo to Firestore:", error);
+    }
+  };
+
+  const handleResetPhoto = async () => {
+    if (!selectedLoc) return;
+    try {
+      await deleteCustomImage(selectedLoc.name);
+      setEditUrl(selectedLoc.imageUrl || "");
+      setIsEditingPhoto(false);
+    } catch (error) {
+      console.error("Failed to delete custom photo from Firestore:", error);
+    }
+  };
+
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 400;
+        const MAX_HEIGHT = 400;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+        
+        if (!selectedLoc) {
+          setIsUploading(false);
+          return;
+        }
+        
+        saveCustomImage(selectedLoc.name, dataUrl)
+          .then(() => {
+            setEditUrl(dataUrl);
+            setIsEditingPhoto(false);
+          })
+          .catch(err => {
+            console.error("Failed to upload image to Firestore:", err);
+            alert("圖片過大或上傳失敗，請稍後再試！");
+          })
+          .finally(() => {
+            setIsUploading(false);
+            // Reset input so same file can be selected again
+            e.target.value = '';
+          });
+      };
+      img.onerror = () => {
+        setIsUploading(false);
+        e.target.value = '';
+        alert("無法讀取圖片");
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.onerror = () => {
+      setIsUploading(false);
+      e.target.value = '';
+      alert("無法讀取檔案");
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Format date string for weather (YYYY-MM-DD)
   const formattedDate = dayInfo.date.split(" ")[0].replace(/\//g, "-");
@@ -126,15 +252,78 @@ export function ItineraryCard({ dayInfo }: ItineraryCardProps) {
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
-                {selectedLoc.imageUrl && (
-                  <div className="w-full h-48 rounded-2xl overflow-hidden shrink-0">
-                    <img 
-                      src={selectedLoc.imageUrl} 
-                      alt={selectedLoc.name} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
+                {(() => {
+                  const displayedImgUrl = customImages[selectedLoc.name] || selectedLoc.imageUrl;
+                  return (
+                    <div className="flex flex-col gap-2 shrink-0">
+                      <div className="w-full h-48 rounded-2xl overflow-hidden shrink-0 relative group shadow-sm bg-neutral-100">
+                        <img 
+                          src={displayedImgUrl || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&q=80&w=800"} 
+                          alt={selectedLoc.name} 
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Automatically fall back to a dynamic travel placeholder if link fails
+                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&q=80&w=800";
+                          }}
+                        />
+                        <button
+                          onClick={() => setIsEditingPhoto(!isEditingPhoto)}
+                          className="absolute bottom-3 right-3 bg-black/70 hover:bg-black/90 text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-md"
+                        >
+                          <Camera className="w-3.5 h-3.5" />
+                          自訂圖片
+                        </button>
+                      </div>
+
+                      {isEditingPhoto && (
+                        <div className="bg-white p-4 rounded-2xl border border-[#EBE9E0] flex flex-col gap-3 mt-1 shadow-sm">
+                          <span className="text-[10px] font-bold text-[#8C8A82] tracking-widest uppercase">自訂景點照片連結 / CUSTOM PHOTO LINK</span>
+                          <p className="text-[11px] text-[#A6A49B] leading-relaxed">
+                            您可以直接貼上自己喜歡的任何網路圖片、Google 雲端或公開網誌照片連結。若為本機照片，您也可以直接在左側檔案管理員上傳，並在此輸入相對路徑（例如：<code className="font-mono bg-neutral-100 px-1 py-0.5 rounded text-[10px]">/assets/my_photo.jpg</code>）。
+                          </p>
+                          <div className="flex flex-col gap-2">
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                placeholder="貼上網址... (或點擊下方直接上傳相片)"
+                                value={editUrl}
+                                onChange={(e) => setEditUrl(e.target.value)}
+                                className="flex-1 min-w-0 bg-[#F1F0E9] border border-transparent rounded-xl px-3 py-2 text-xs outline-none focus:border-[#EBE9E0] focus:bg-white text-[#2D2D2D] transition-colors"
+                              />
+                              <button
+                                onClick={handleSavePhoto}
+                                className="bg-black hover:bg-[#2D2D2D] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shrink-0"
+                              >
+                                儲存
+                              </button>
+                            </div>
+                            <div className="flex items-center justify-between mt-1">
+                              <label className={`flex items-center gap-1.5 cursor-pointer transition-colors font-bold text-xs px-3 py-2 rounded-xl border border-transparent ${isUploading ? 'text-[#A6A49B] bg-[#F8F8F8] cursor-not-allowed' : 'text-[#8C8A82] hover:text-[#2D2D2D] bg-[#F1F0E9] hover:border-[#EBE9E0]'}`}>
+                                <Upload className={`w-4 h-4 ${isUploading ? 'animate-bounce' : ''}`} />
+                                {isUploading ? "上傳中請稍候..." : "從相簿上傳"}
+                                <input 
+                                  type="file" 
+                                  accept="image/*" 
+                                  className="hidden" 
+                                  disabled={isUploading}
+                                  onChange={handleFileUpload}
+                                />
+                              </label>
+                              {customImages[selectedLoc.name] && (
+                                <button
+                                  onClick={handleResetPhoto}
+                                  className="text-[#8C8A82] hover:text-red-500 text-xs font-bold px-3 py-2 rounded-xl transition-colors shrink-0"
+                                >
+                                  恢復預設
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 {selectedLoc.story ? (
                   <div className="flex flex-col gap-3">
@@ -210,7 +399,7 @@ const getTypeLabel = (type: string) => {
   }
 };
 
-function LocationCard({ loc, isLast, onClick }: { loc: Place; isLast: boolean; onClick: () => void }) {
+function LocationCard({ loc, isLast, onClick }: { loc: Place; isLast: boolean; onClick: () => void; key?: any }) {
   const getIcon = () => {
     switch (loc.type) {
       case "spot": return <Camera className="w-3.5 h-3.5 text-white" />;

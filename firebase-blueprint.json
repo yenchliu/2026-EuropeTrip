@@ -1,0 +1,23 @@
+{
+  "collections": {
+    "expenses": {
+      "description": "Travel expenses for the trip",
+      "fields": {
+        "name": { "type": "string", "description": "Name or description of the expense" },
+        "amount": { "type": "number", "description": "The cost of the expense" },
+        "currency": { "type": "string", "description": "Currency code (EUR, GBP, TWD)" },
+        "category": { "type": "string", "description": "Category (Food, Transport, Spot, Shopping, Hotel, Other)" },
+        "date": { "type": "string", "description": "Date of the expense in YYYY-MM-DD" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "custom_images": {
+      "description": "Collaborative custom images uploaded/linked for itinerary locations",
+      "fields": {
+        "spotName": { "type": "string", "description": "The name of the location or spot" },
+        "imageUrl": { "type": "string", "description": "Base64 or external url of the custom image" },
+        "updatedAt": { "type": "string", "description": "Last updated date/time" }
+      }
+    }
+  }
+}

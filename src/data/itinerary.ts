@@ -1,4 +1,5 @@
 import { DayItinerary } from "../types";
+import airportImage from "../assets/images/regenerated_image_1781674448435.png";
 
 export const itineraryData: DayItinerary[] = [
   {
@@ -12,7 +13,8 @@ export const itineraryData: DayItinerary[] = [
         name: "台灣桃園機場 → 倫敦希斯洛機場",
         type: "transport",
         time: "08:15 - 19:20",
-        description: "長榮航空 BR67，平穩的飛行中安靜休息。班機於當日晚間抵達倫敦。"
+        description: "長榮航空 BR67，平穩的飛行中安靜休息。班機於當日晚間抵達倫敦。",
+        imageUrl: airportImage
       }
     ],
     accommodation: {
@@ -41,7 +43,7 @@ export const itineraryData: DayItinerary[] = [
         lon: -0.6044,
         description: "征服者威廉所建的木製防衛要塞，現為宏偉的華麗宮殿，收藏英國王室珍寶，瑪麗皇后娃娃屋。",
         story: "溫莎古堡是世上最大且最古老、並仍有人居住的城堡。許多英國君主都將其視為自己的家。這裡也是已故英國女王伊莉莎白二世最鍾愛的週末宅邸。有趣的是，當女王在城堡內時，圓塔上升起的是皇家旗幟（Royal Standard），而她不在時，則升起英國國旗（Union Jack）。",
-        imageUrl: "https://images.unsplash.com/photo-1627883204990-281b37b67812?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1590059030511-b3e8022d40c5?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "史前巨石群 Stonehenge",
@@ -119,8 +121,8 @@ export const itineraryData: DayItinerary[] = [
         lat: 51.4993,
         lon: -0.1273,
         description: "歷代英國君王加冕典禮及皇室婚禮聖地，美麗的歌德式外觀。",
-        story: "西敏寺是英國皇室的專屬禮拜堂，自1066年以來幾乎所有的英國君主都在這裡加冕。這裡也是威廉王子與凱特王妃舉行世紀婚禮的地方。裡面安葬了許多歷史名人，包括牛頓和達爾文。",
-        imageUrl: "https://images.unsplash.com/photo-1520630504781-a9fdeeeae986?auto=format&fit=crop&q=80&w=800"
+        story: "西敏寺是英國皇室的專屬禮拜堂，自1066年以來幾乎所有的英國君主都在這裡加冕。這裡也是威廉王子與凱特王妃舉行世紀婚禮的地方。裡面安葬了許多歷史名人，包括牛頓 and 達爾文。",
+        imageUrl: "https://images.unsplash.com/photo-1582239454131-01f1ae43dae3?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "當地美食探索",
@@ -154,7 +156,7 @@ export const itineraryData: DayItinerary[] = [
         lon: -0.1269,
         description: "世界三大博物館之一，館藏1300多萬件。",
         story: "大英博物館成立於1753年，是世界上第一座國家級的公共博物館。館內的「羅塞塔石碑」不僅是鎮館之寶，更是解密古埃及象形文字的關鍵鑰匙。博物館雖然擁有超過800萬件藏品，但平時展出的只佔總館藏的1%左右！",
-        imageUrl: "https://images.unsplash.com/photo-1565557766528-10903328e146?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1572953254133-cff8d92949ff?auto=format&fit=crop&q=80&w=800",
         mustBuy: ["羅塞塔石碑周邊", "古埃及木乃伊周邊明信片"]
       },
       {
@@ -164,7 +166,7 @@ export const itineraryData: DayItinerary[] = [
         lon: -0.1419,
         description: "英國國王的官方宅邸，新古典主義建築風格。",
         story: "白金漢宮是英國君主的官方寢宮。若建築上方飄揚著君主旗（Royal Standard），就代表國王目前在宮內。這裡著名的衛兵交接儀式，更是吸引全球遊客必看的經典傳統。",
-        imageUrl: "https://images.unsplash.com/photo-1543722530-d2c3201371e7?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1569074187119-c87815b476da?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "柯芬園",
@@ -173,7 +175,7 @@ export const itineraryData: DayItinerary[] = [
         lon: -0.1228,
         description: "倫敦第一個廣場，充滿藝術與休閒購物風貌的古物市集。",
         story: "柯芬園從一開始的果菜市場，轉變為如今充滿藝術與街頭表演的購物勝地。電影《窈窕淑女》中奧黛麗赫本賣花的情景也是以此為背景，充滿浪漫的復古情懷。",
-        imageUrl: "https://images.unsplash.com/photo-1513622470522-26c311545db4?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1559825481-12a05cc00344?auto=format&fit=crop&q=80&w=800",
         mustBuy: ["Whittard 英國熱茶", "Jo Malone 香水"]
       },
       {
@@ -183,7 +185,7 @@ export const itineraryData: DayItinerary[] = [
         lon: -0.1388,
         description: "著名購物大街。",
         story: "攝政街以壯麗的圓弧形建築排列聞名，被譽為倫敦最美的購物大街。這條街最初是為了連接皇家公園與攝政王的皇宮而設計，如今則是世界頂級品牌的聚集地。",
-        imageUrl: "https://images.unsplash.com/photo-1605335133668-5a083f2dc5a8?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1532454979102-1598462002f2?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "港式飲茶風味餐",
@@ -217,7 +219,7 @@ export const itineraryData: DayItinerary[] = [
         lon: -0.0759,
         description: "公元11世紀的防禦城堡，皇家宮殿、寶庫、監獄。必看珠寶室。",
         story: "倫敦塔曾是堡壘、皇宮，甚至是關押政治犯的監獄。最引人注目的莫過於珍寶館中閃亮的皇冠寶石。傳說塔內如果不飼養烏鴉，倫敦塔與大英帝國就會垮台，因此塔裡至今都有專人照顧著一群渡鴉。",
-        imageUrl: "https://images.unsplash.com/photo-1549887255-a2491bbfc6e8?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1584967918940-a7d51b064268?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "倫敦塔橋",
@@ -262,7 +264,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3431,
         description: "俯瞰巴黎市區最佳位置的羅馬拜占庭色彩白色教堂。",
         story: "位於巴黎最高點的聖心堂，由會分泌方解石的特殊白石岩建造，只要遇到雨水就會越洗越白，因此一百多年來始終保持著無瑕的潔白外觀，是俯瞰巴黎全景的最佳地點。",
-        imageUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1508189860359-777ad1a8b7a1?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "畫家村",
@@ -271,7 +273,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3400,
         description: "感受充滿文藝氣息的街頭藝術畫家為你速寫肖像畫。",
         story: "帖特廣場（Place du Tertre）也就是著名的畫家村，曾是畢卡索、梵谷等印象派大師的聚集地。現在廣場上充滿了街頭畫家，你可以在一杯咖啡的時間裡，請他們為你畫一張屬於巴黎的肖像速寫。",
-        imageUrl: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1549413180-2070e6093fb6?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "巴黎聖母院",
@@ -280,7 +282,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3499,
         description: "西堤島上的典型歌德式建築，浪漫之都巴黎起點(原點 Point Zéro)。",
         story: "巴黎聖母院是典型的哥德式建築，也是大文豪雨果《鐘樓怪人》的靈感來源。廣場上有一個「原點（Point Zéro）」，傳說只要踩上原點，未來就一定會再回到巴黎。",
-        imageUrl: "https://images.unsplash.com/photo-1503796853874-909249fb0202?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1478147427282-58a87a120781?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "莎士比亞書店",
@@ -289,7 +291,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3471,
         description: "海明威《流動的饗宴》與多部電影取景的經典百年獨立書店。",
         story: "這間英文獨立書店不僅是《情迷午夜巴黎》和《日落之前》的拍攝地，在20世紀初也曾是海明威、喬伊斯等文學巨匠的庇護所。店裡的古董打字機與堆積如山的書籍，散發出獨特的藝文氣息。",
-        imageUrl: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1604871000636-074fa5117945?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "左岸咖啡區",
@@ -329,7 +331,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3421,
         description: "NETFLIX人氣影集《Emily in Paris》及周杰倫MV取景地。",
         story: "莎瑪麗丹百貨擁有150年歷史，歷經長達16年的翻修後再度驚艷世界。融合了新藝術和裝飾藝術風格，那搶眼的黃色波浪型玻璃天棚和鑄鐵樓梯，讓這裡成為影集《Emily in Paris》最美的取景地之一。",
-        imageUrl: "https://images.unsplash.com/photo-1588667551061-0d32c5f11ee0?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1620000617482-821324eb9a14?auto=format&fit=crop&q=80&w=800",
         mustBuy: ["法國小眾香水", "設計師精品"]
       },
       {
@@ -348,7 +350,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3075,
         description: "巴黎浪漫代名詞，MUST-HAVE EXPERIENCE。",
         story: "這條被文人徐志摩翻譯為「香榭麗舍」的大道，意為希臘神話中聖潔的「愛麗舍田園」。西起凱旋門、東至協和廣場，沿途精品店林立，漫步在此絕對是體驗巴黎浪漫的必辦事項。",
-        imageUrl: "https://images.unsplash.com/photo-1522064971842-888a7dbfccb8?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "協和廣場",
@@ -390,8 +392,8 @@ export const itineraryData: DayItinerary[] = [
         lat: 48.8606,
         lon: 2.3376,
         description: "世界三大博物館。必看三寶：蒙娜麗莎的微笑、勝利女神像、米洛的維納斯。",
-        story: "羅浮宮最初是作為中世紀的防禦堡壘而建。1989年由知名建築師貝聿銘設計的玻璃金字塔，在建造初期曾遭受超過九成法國人的強烈反對，認為這座現代建築會破壞古典宮殿的優雅。如今，金字塔不僅負責引入自然光，更帶來了完美的動線設計，成為巴黎最具代表性的地標之一。",
-        imageUrl: "https://images.unsplash.com/photo-1499892477245-ddc040c0e8ce?auto=format&fit=crop&q=80&w=800"
+        story: "羅浮宮最初是作為中世紀的防禦堡壘而建。1989年由知名建築師貝聿銘設計的玻璃金字塔，在建造初期曾遭受超過九成法國人的強烈反對，認為這座現代建築會破壞古典宮殿之優雅。如今，金字塔不僅負責引入自然光，更帶來了完美的動線設計，成為巴黎最具代表性的地標之一。",
+        imageUrl: "https://images.unsplash.com/photo-1601887389937-0b02c26b6c3c?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "巴黎加尼葉歌劇院",
@@ -400,7 +402,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3316,
         description: "新巴洛克式建築，《歌劇魅影》故事背景與靈感發源地。",
         story: "這座奢華的新巴洛克式建築耗時15年才完成，大理石樓梯與華麗的吊燈令人目不暇給。最為人津津樂道的是，歌劇院底下真的有一座暗湖，這正是經典音樂劇《歌劇魅影》故事的靈感發源地！",
-        imageUrl: "https://images.unsplash.com/photo-1583084124991-b3b4f691b0fb?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "Fragonard 香水博物館",
@@ -409,7 +411,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3302,
         description: "揭開生產香水的神秘面紗，見證自古埃及的香水歷史與珍貴容器。",
         story: "花宮娜是一家歷史悠久的家族香水企業。在這間具有濃厚古典氣息的博物館中，你可以看到古埃及時代的香水瓶，並了解萃取、蒸餾等百年香水工藝，是一場嗅覺與視覺的法式饗宴。",
-        imageUrl: "https://images.unsplash.com/photo-1595420379989-70aa74fa5a97?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800",
         mustBuy: ["玫瑰香精", "特色香水與香膏禮盒"]
       },
       {
@@ -419,7 +421,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3323,
         description: "法國百年規模最大的時尚百貨購物天堂。",
         story: "來到巴黎怎能錯過購物狂的朝聖地！拉法葉百貨和春天百貨都有著超過百年的歷史。最令人震撼的是拉法葉百貨內部高達43米的拜占庭風格彩繪玻璃穹頂，站在底下仰望絕對是奢華極致的體驗。",
-        imageUrl: "https://images.unsplash.com/photo-1589724108873-ce70c4b69389?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1549417229-aa67d3263c09?auto=format&fit=crop&q=80&w=800",
         mustBuy: ["法國美妝保養", "知名馬卡龍 Pierre Hermé"]
       },
       {
@@ -459,7 +461,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.3333,
         description: "搭船一小時欣賞奧賽美術館、新橋等知名風光。",
         story: "塞納河被譽為巴黎的生命線。搭乘遊船是飽覽巴黎景點最悠閒的方式，水上視角能將艾菲爾鐵塔、聖母院、奧賽美術館等左岸與右岸的風華盡收眼底，尤其在夕陽西下時分更是浪漫無比。",
-        imageUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1524338198850-8a2ff63a103f?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "凡爾賽宮 Château de Versailles",
@@ -468,7 +470,7 @@ export const itineraryData: DayItinerary[] = [
         lon: 2.1204,
         description: "建於路易十四，歐洲最大最豪華的宮殿建築與花園。",
         story: "凡爾賽宮最初只是路易十三的狩獵小屋，後來被路易十四擴建為全歐洲最奢華的宮殿。「鏡廳」是其中最著名的房間，由357面鏡子組成，當年凡爾賽條約就是在這個璀璨奪目的廳堂裡簽署的。",
-        imageUrl: "https://images.unsplash.com/photo-1563212004-9411ddbd316d?auto=format&fit=crop&q=80&w=800"
+        imageUrl: "https://images.unsplash.com/photo-1524099163253-32b7f0256868?auto=format&fit=crop&q=80&w=800"
       },
       {
         name: "塞納河遊船饗宴",
