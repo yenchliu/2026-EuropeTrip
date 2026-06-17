@@ -8,7 +8,8 @@ interface WeatherWidgetProps {
 }
 
 export function WeatherWidget({ lat, lon, dateStr }: WeatherWidgetProps) {
-  const [temp, setTemp] = useState<number | null>(null);
+  const [tempMax, setTempMax] = useState<number | null>(null);
+  const [tempMin, setTempMin] = useState<number | null>(null);
   const [condition, setCondition] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,13 +27,15 @@ export function WeatherWidget({ lat, lon, dateStr }: WeatherWidgetProps) {
         if (diffDays < -90 || diffDays > 15) {
           // Out of range (we only handle recent past and near future)
           if (isMounted) {
-            setTemp(null);
+            setTempMax(null);
+            setTempMin(null);
             setLoading(false);
           }
           return;
         }
 
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,weathercode&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`;
+        // Fetching daily max and min temperature
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`;
         const res = await fetch(url);
         
         if (!res.ok) {
@@ -42,13 +45,15 @@ export function WeatherWidget({ lat, lon, dateStr }: WeatherWidgetProps) {
         const data = await res.json();
 
         if (isMounted && data.daily && data.daily.temperature_2m_max?.length > 0) {
-          setTemp(data.daily.temperature_2m_max[0]);
+          setTempMax(data.daily.temperature_2m_max[0]);
+          setTempMin(data.daily.temperature_2m_min[0]);
           setCondition(data.daily.weathercode[0]);
         }
       } catch (err) {
         console.error("Failed to fetch weather", err);
         if (isMounted) {
-          setTemp(null); // Clear or leave null on error
+          setTempMax(null);
+          setTempMin(null); // Clear or leave null on error
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -67,7 +72,7 @@ export function WeatherWidget({ lat, lon, dateStr }: WeatherWidgetProps) {
     );
   }
 
-  if (temp === null) return null;
+  if (tempMax === null || tempMin === null) return null;
 
   // WMO Weather interpretation codes
   // 0: Clear sky
@@ -82,12 +87,15 @@ export function WeatherWidget({ lat, lon, dateStr }: WeatherWidgetProps) {
   const weatherText = isRain ? "雨天" : isCloudy ? "多雲" : "晴朗";
 
   return (
-    <div className="flex flex-col items-end">
-      <span className="text-xl font-light text-[#1A1A1A]">{temp}°C</span>
+    <div className="flex flex-col items-end group relative">
+      <span className="text-lg font-light text-[#1A1A1A]">
+        {Math.round(tempMin)}° <span className="text-[#8C8A82] mx-0.5">-</span> {Math.round(tempMax)}°C
+      </span>
       <div className="flex items-center gap-1">
         <Icon className="w-3 h-3 text-[#8C8A82]" />
         <span className="text-[10px] text-[#8C8A82] font-bold tracking-widest uppercase">{weatherText}</span>
       </div>
+      <div className="absolute top-full mt-1 right-0 w-max max-w-[200px] text-right pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity bg-black text-white text-[10px] py-1 px-2 rounded tracking-wider shadow-lg z-10">預報來源: Open-Meteo</div>
     </div>
   );
 }

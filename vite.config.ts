@@ -5,7 +5,6 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base:'/2026-EuropeTrip/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

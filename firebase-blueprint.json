@@ -18,6 +18,15 @@
         "imageUrl": { "type": "string", "description": "Base64 or external url of the custom image" },
         "updatedAt": { "type": "string", "description": "Last updated date/time" }
       }
+    },
+    "packing_items": {
+      "description": "Collaborative packing list items",
+      "fields": {
+        "name": { "type": "string" },
+        "isChecked": { "type": "boolean" },
+        "type": { "type": "string", "description": "carry-on or checked" },
+        "createdAt": { "type": "string" }
+      }
     }
   }
 }

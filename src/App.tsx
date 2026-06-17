@@ -174,16 +174,16 @@ export default function App() {
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#F8F7F2]/90 backdrop-blur-xl border-t border-[#E5E3DB] pb-safe">
         <div className="flex items-center justify-around px-2 py-3">
           <NavButton 
-            icon={<MapIcon className="w-5 h-5" />} 
-            label="行程" 
-            isActive={activeTab === "itinerary"} 
-            onClick={() => setActiveTab("itinerary")} 
-          />
-          <NavButton 
             icon={<Grip className="w-5 h-5" />} 
             label="工具" 
             isActive={activeTab === "tools"} 
             onClick={() => setActiveTab("tools")} 
+          />
+          <NavButton 
+            icon={<MapIcon className="w-5 h-5" />} 
+            label="行程" 
+            isActive={activeTab === "itinerary"} 
+            onClick={() => setActiveTab("itinerary")} 
           />
           <NavButton 
             icon={<Wallet className="w-5 h-5" />} 

@@ -17,6 +17,51 @@ export interface CustomImageDoc {
   updatedAt: string;
 }
 
+export interface PackingItem {
+  id?: string;
+  name: string;
+  isChecked: boolean;
+  type: 'carry-on' | 'checked';
+  createdAt?: string;
+}
+
+export const subscribeToPackingItems = (
+  callback: (items: PackingItem[]) => void,
+  onError?: (error: any) => void
+) => {
+  return onSnapshot(
+    collection(db, 'packing_items'),
+    (snapshot) => {
+      const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as PackingItem);
+      items.sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return timeA - timeB;
+      });
+      callback(items);
+    },
+    (error) => {
+      console.error("Firestore packing_items error:", error);
+      if (onError) onError(error);
+    }
+  );
+};
+
+export const addPackingItem = async (item: Omit<PackingItem, 'id'>) => {
+  return await addDoc(collection(db, 'packing_items'), {
+    ...item,
+    createdAt: new Date().toISOString()
+  });
+};
+
+export const updatePackingItem = async (id: string, updates: Partial<PackingItem>) => {
+  return await setDoc(doc(db, 'packing_items', id), updates, { merge: true });
+};
+
+export const deletePackingItem = async (id: string) => {
+  return await deleteDoc(doc(db, 'packing_items', id));
+};
+
 export interface Expense {
   id?: string;
   name: string;

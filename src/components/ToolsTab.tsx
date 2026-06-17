@@ -1,8 +1,11 @@
 import { Plane, Phone, Info, ShieldAlert } from "lucide-react";
+import { PackingList } from "./PackingList";
 
 export function ToolsTab() {
   return (
     <div className="flex flex-col gap-6 p-6 pb-12">
+      <PackingList />
+      
       {/* Emergency Contacts */}
       <div className="flex flex-col gap-4">
         <h3 className="text-[10px] font-bold text-[#A6A49B] tracking-widest uppercase flex items-center gap-2">
