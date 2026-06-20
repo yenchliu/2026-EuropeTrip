@@ -1,10 +1,14 @@
 import { Plane, Phone, Info, ShieldAlert } from "lucide-react";
 import { PackingList } from "./PackingList";
+import { CurrencyConverter } from "./CurrencyConverter";
 
 export function ToolsTab() {
   return (
     <div className="flex flex-col gap-6 p-6 pb-12">
       <PackingList />
+      
+      {/* Currency Converter */}
+      <CurrencyConverter />
       
       {/* Emergency Contacts */}
       <div className="flex flex-col gap-4">
@@ -26,9 +30,9 @@ export function ToolsTab() {
           <div className="flex items-center justify-between border-b border-dashed border-[#E5E3DB] pb-3">
             <div className="flex flex-col">
               <span className="text-sm font-medium text-[#2D2D2D]">參團領隊: 林佩君</span>
-              <span className="text-xs text-[#8C8A82]">台灣手機</span>
+              <span className="text-xs text-[#8C8A82]">台灣手機: +886952520435</span>
             </div>
-            <a href="tel:0952520435" className="bg-[#F1F0E9] text-[#2D2D2D] p-2 rounded-full hover:bg-[#EBE9E0] transition-colors">
+            <a href="tel:+886952520435" className="bg-[#F1F0E9] text-[#2D2D2D] p-2 rounded-full hover:bg-[#EBE9E0] transition-colors">
               <Phone className="w-4 h-4" />
             </a>
           </div>
@@ -36,8 +40,9 @@ export function ToolsTab() {
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
               <span className="text-sm font-medium text-[#2D2D2D]">桃園二航廈代表送機協助</span>
+              <span className="text-xs text-[#8C8A82]">+886988236335</span>
             </div>
-            <a href="tel:0988-236335" className="bg-[#F1F0E9] text-[#2D2D2D] p-2 rounded-full hover:bg-[#EBE9E0] transition-colors">
+            <a href="tel:+886988236335" className="bg-[#F1F0E9] text-[#2D2D2D] p-2 rounded-full hover:bg-[#EBE9E0] transition-colors">
               <Phone className="w-4 h-4" />
             </a>
           </div>
