@@ -72,7 +72,9 @@ export function CurrencyConverter() {
               <option value="EUR">€</option>
             </select>
             <input
-              type="number"
+              type="text"
+              inputMode="decimal"
+              pattern="[0-9]*"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="金額"

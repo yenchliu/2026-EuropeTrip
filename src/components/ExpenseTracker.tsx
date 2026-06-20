@@ -159,7 +159,7 @@ export function ExpenseTracker() {
             {syncStatus === "synced" ? (
               <>
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full inline-block animate-pulse" />
-                雲端已同步 (夫妻共享)
+                雲端已同步 (多人共享)
               </>
             ) : (
               <>

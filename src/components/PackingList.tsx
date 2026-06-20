@@ -65,6 +65,7 @@ export function PackingList() {
   const [expandedType, setExpandedType] = useState<'carry-on' | 'checked' | null>(null);
   const [newItemName, setNewItemName] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [showConfirmClear, setShowConfirmClear] = useState(false);
 
   useEffect(() => {
     // Load local storage items
@@ -204,6 +205,11 @@ export function PackingList() {
     updateItems(newItems);
   };
 
+  const handleClearAll = () => {
+    updateItems([]);
+    setShowConfirmClear(false);
+  };
+
   const handleAddItem = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newItemName.trim() || !expandedType) return;
@@ -294,7 +300,34 @@ export function PackingList() {
            <CheckSquare className="w-3.5 h-3.5" />
            打包清單 / PACKING
          </h3>
-         <span className="text-[10px] text-[#A6A49B] bg-[#EBE9E0] px-2 py-0.5 rounded font-bold">按住左滑刪除</span>
+         <div className="flex items-center gap-2">
+           <span className="text-[10px] text-[#A6A49B] bg-[#EBE9E0] px-2 py-0.5 rounded font-bold">按住左滑刪除</span>
+           {items.length > 0 && !showConfirmClear && (
+             <button 
+               onClick={() => setShowConfirmClear(true)}
+               className="text-[10px] text-red-500 bg-red-50 hover:bg-red-100 px-2 py-0.5 rounded font-bold transition-colors"
+             >
+               一鍵清空
+             </button>
+           )}
+           {showConfirmClear && (
+             <div className="flex items-center gap-1">
+               <span className="text-[10px] text-red-500 font-bold">確定清空?</span>
+               <button 
+                 onClick={handleClearAll}
+                 className="text-[10px] text-white bg-red-500 hover:bg-red-600 px-2 py-0.5 rounded font-bold transition-colors"
+               >
+                 確定
+               </button>
+               <button 
+                 onClick={() => setShowConfirmClear(false)}
+                 className="text-[10px] text-[#A6A49B] bg-[#EBE9E0] hover:bg-[#DEDCD2] px-2 py-0.5 rounded font-bold transition-colors"
+               >
+                 取消
+               </button>
+             </div>
+           )}
+         </div>
       </div>
       <div className="flex flex-col gap-3">
         {renderSection('carry-on', '隨身行李打包清單', carryOnItems)}
