@@ -1,14 +1,16 @@
 import { Plane, Phone, Info, ShieldAlert } from "lucide-react";
 import { PackingList } from "./PackingList";
 import { CurrencyConverter } from "./CurrencyConverter";
+import { TodoList } from "./TodoList";
 
 export function ToolsTab() {
   return (
     <div className="flex flex-col gap-6 p-6 pb-12">
-      <PackingList />
-      
-      {/* Currency Converter */}
+      <TodoList />
+
       <CurrencyConverter />
+
+      <PackingList />
       
       {/* Emergency Contacts */}
       <div className="flex flex-col gap-4">

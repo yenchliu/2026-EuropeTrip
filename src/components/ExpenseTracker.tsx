@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { addExpense, deleteExpense, subscribeToExpenses, Expense } from "../lib/firebase";
 import { Plus, Trash2, Wallet } from "lucide-react";
 import { cn } from "../lib/utils";
+import { ExpenseDashboard } from "./ExpenseDashboard";
 
 const CATEGORY_COLORS = {
   Food: "bg-[#FDE68A] text-[#2D2D2D]",
@@ -191,12 +192,12 @@ export function ExpenseTracker() {
               <option value="TWD">$ TWD</option>
             </select>
             <input 
-              type="number" 
+              type="text"
+              inputMode="decimal"
+              pattern="[0-9\.]*"
               placeholder="金額 / Amount" 
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              step="0.01"
-              min="0"
               className="flex-1 min-w-0 bg-[#F1F0E9] border border-transparent rounded-xl px-4 py-3 text-sm focus:border-[#EBE9E0] focus:bg-white outline-none transition-colors text-[#2D2D2D] placeholder-[#8C8A82]"
               required
             />
@@ -235,6 +236,9 @@ export function ExpenseTracker() {
           </button>
         </div>
       </form>
+
+      {/* Dashboard */}
+      <ExpenseDashboard expenses={expenses} />
 
       {/* List */}
       <div className="flex flex-col gap-3">
